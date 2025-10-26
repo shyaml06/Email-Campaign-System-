@@ -1,0 +1,4 @@
+.env
+email.csv
+go.mod
+go.sum
