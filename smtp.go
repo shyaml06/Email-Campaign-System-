@@ -1,18 +1,18 @@
+// smtp.go
 package main
 
 import (
 	"fmt"
-	"log"
 	"net/smtp"
 	"os"
 
 	"github.com/joho/godotenv"
 )
 
-func Sender(recipient Recipient) {
+func Sender(recipient Recipient) error {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+		return err
 	}
 
 	from := os.Getenv("MAIL")
@@ -25,14 +25,10 @@ func Sender(recipient Recipient) {
 	auth := smtp.PlainAuth("", from, password, host)
 	err = smtp.SendMail(host+":"+port, auth, from, toList, body)
 
-	// handling the errors
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 
-	fmt.Println("Successfully sent mail to all user in toList")
-
-	//fmt.Println(from, password)
-
+	fmt.Println("Successfully sent mail to:", recipient.Email)
+	return nil
 }

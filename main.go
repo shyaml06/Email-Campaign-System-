@@ -1,3 +1,4 @@
+// main.go
 package main
 
 import (
@@ -10,7 +11,6 @@ type Recipient struct {
 }
 
 func main() {
-
 	recipientChannel := make(chan Recipient)
 
 	go func() {
@@ -18,14 +18,12 @@ func main() {
 	}()
 
 	var wg sync.WaitGroup
+	workerCount := 3
 
-	workercount := 3
-	for i := 1; i <= workercount; i++ {
+	for i := 1; i <= workerCount; i++ {
 		wg.Add(1)
 		go emailWorker(i, recipientChannel, &wg)
-
 	}
 
 	wg.Wait()
-
 }
